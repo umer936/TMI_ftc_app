@@ -68,6 +68,11 @@
       tools:replace="android:label">
     </activity>
     <activity
+        android:name="com.qualcomm.ftccommon.FtcWifiChannelSelectorActivity"
+        android:label="@string/title_activity_wifi_channel_selector"
+        tools:replace="android:label">
+    </activity>
+    <activity
       android:name="com.qualcomm.ftccommon.ConfigWifiDirectActivity"
       android:label="@string/title_activity_config_wifi_direct" />
     <activity
