@@ -30,7 +30,7 @@ public class TankTeleOp extends OpMode {
     @Override
     public void loop() {
 
-        float right = -gamepad1.left_stick_y;
+        float right = gamepad1.left_stick_y;
         float left = gamepad1.right_stick_y;
 
         // clip the right/left values so that the values never exceed +/- 1
@@ -61,7 +61,6 @@ public class TankTeleOp extends OpMode {
     public void stop() {
 
     }
-
     /*
      * This method scales the joystick input so for low joystick values, the
      * scaled value is less than linear.  This is to make it easier to drive
@@ -79,7 +78,7 @@ public class TankTeleOp extends OpMode {
             index = 16;
         }
 
-        double dScale = 0;
+        double dScale = 0.0;
         if (dVal < 0) {
             dScale = -scaleArray[index];
         } else {
