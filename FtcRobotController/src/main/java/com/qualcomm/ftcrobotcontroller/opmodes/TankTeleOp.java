@@ -3,7 +3,6 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.configuration.ServoConfiguration;
 import com.qualcomm.robotcore.util.Range;
 
 
@@ -17,14 +16,23 @@ public class TankTeleOp extends OpMode {
     DcMotor motorLeft;
 //    DcMotor motorIntake;
 
+
+    final static double hook_MIN_RANGE  = 0.20;
+    final static double hook_MAX_RANGE  = 0.90;
+    final static double shelter_MIN_RANGE  = 0.20;
+    final static double shelter_MAX_RANGE  = 0.7;
+
     //Initialize Servos
     Servo hook;
-    Servo climberLeft;
-    Servo climberRight;
+    //    Servo climberLeft;
+//    Servo climberRight;
     Servo shelter;
-
     public Boolean aToggle = false; //part of the toggle for the a button
     float intake = 0;
+    public int direction = 1;
+
+    double hookPosition;
+    double shelterPosition;
 
     public TankTeleOp() {
 
@@ -36,10 +44,10 @@ public class TankTeleOp extends OpMode {
         motorLeft = hardwareMap.dcMotor.get("motor_1");
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
 //        motorIntake = hardwareMap.dcMotor.get("motor_3");
-        climberLeft = hardwareMap.servo.get("servo_1");
-        climberRight = hardwareMap.servo.get("servo_2");
-        shelter = hardwareMap.servo.get("servo_3");
-        hook = hardwareMap.servo.get("servo_4");
+//        climberLeft = hardwareMap.servo.get("servo_1");
+//        climberRight = hardwareMap.servo.get("servo_2");
+        shelter = hardwareMap.servo.get("servo_4");
+        hook = hardwareMap.servo.get("servo_3");
     }
 
 
@@ -49,6 +57,19 @@ public class TankTeleOp extends OpMode {
         float right = gamepad1.left_stick_y;
         float left = gamepad1.right_stick_y;
         //float intake;
+
+        if(gamepad1.start)
+        {
+            if(direction == 0)
+            {
+                direction = 1;
+            }
+            else
+            {
+                direction = 0;
+            }
+
+        }
 
         /*if(gamepad1.a == true)
         {
@@ -84,38 +105,52 @@ public class TankTeleOp extends OpMode {
         right = (float)scaleInput(right);
         left = (float)scaleInput(left);
 
+        if(direction == 1)
+        {
+            right = -right;
+            left = -left;
+        }
 
         // write the values to the motors
-        motorRight.setPower(right);
-        motorLeft.setPower(left);
+        motorRight.setPower(left);
+        motorLeft.setPower(right);
 
         if(gamepad2.a)
         {
-            hook.setPosition(.5);
+            hookPosition = .5;
         }
         if(gamepad2.b)
         {
-            hook.setPosition(0);
-        }
-        if(gamepad2.dpad_left)
-        {
-            climberLeft.setPosition(.7);
-        }
-        if(gamepad2.dpad_right)
-        {
-            climberRight.setPosition(.7);
+            hookPosition = 0;
         }
         if(gamepad2.x)
         {
-            shelter.setPosition(0);
+            shelterPosition = 0;
         }
         if(gamepad2.y)
         {
-            shelter.setPosition(.5);
+            shelterPosition = .5;
         }
+        hookPosition = Range.clip(hookPosition, hook_MIN_RANGE, hook_MAX_RANGE);
+        shelterPosition = Range.clip(shelterPosition, shelter_MIN_RANGE, shelter_MAX_RANGE);
+
+        hook.setPosition(hookPosition);
+        shelter.setPosition(shelterPosition);
+
+//        if(gamepad2.dpad_left)
+//        {
+//            climberLeft.setPosition(.7);
+//        }
+//        if(gamepad2.dpad_right)
+//        {
+//            climberRight.setPosition(.7);
+//        }
+
+
         telemetry.addData("Text", "*** Robot Data***");
-        telemetry.addData("", "left  pwr: " + String.format("%.2f", left));
-        telemetry.addData("", "right pwr: " + String.format("%.2f", right));
+        telemetry.addData("left", "left  pwr: " + String.format("%.2f", left));
+        telemetry.addData("right", "right pwr: " + String.format("%.2f", right));
+        telemetry.addData("Direction", "Direction: " + String.format("%d", direction));
 
 
     }
