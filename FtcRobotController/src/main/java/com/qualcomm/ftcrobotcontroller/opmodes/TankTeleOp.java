@@ -17,15 +17,18 @@ public class TankTeleOp extends OpMode {
 //    DcMotor motorIntake;
 
 
-    final static double hook_MIN_RANGE  = 0.20;
-    final static double hook_MAX_RANGE  = 0.90;
-    final static double shelter_MIN_RANGE  = 0.20;
-    final static double shelter_MAX_RANGE  = 0.7;
+    final static double hook_MIN_RANGE  = 0;
+    final static double hook_MAX_RANGE  = 2;
+    final static double shelter_MIN_RANGE  = -5;
+    final static double shelter_MAX_RANGE  = 5;
+    final static double climberRight_MIN_RANGE = 0;
+    final static double climberRight_MAX_RANGE = 1;
+
 
     //Initialize Servos
     Servo hook;
     //    Servo climberLeft;
-//    Servo climberRight;
+    Servo climberRight;
     Servo shelter;
     public Boolean aToggle = false; //part of the toggle for the a button
     float intake = 0;
@@ -33,6 +36,7 @@ public class TankTeleOp extends OpMode {
 
     double hookPosition;
     double shelterPosition;
+    double climberRightPosition;
 
     public TankTeleOp() {
 
@@ -45,7 +49,7 @@ public class TankTeleOp extends OpMode {
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
 //        motorIntake = hardwareMap.dcMotor.get("motor_3");
 //        climberLeft = hardwareMap.servo.get("servo_1");
-//        climberRight = hardwareMap.servo.get("servo_2");
+        climberRight = hardwareMap.servo.get("servo_2");
         shelter = hardwareMap.servo.get("servo_4");
         hook = hardwareMap.servo.get("servo_3");
     }
@@ -117,7 +121,7 @@ public class TankTeleOp extends OpMode {
 
         if(gamepad2.a)
         {
-            hookPosition = .5;
+            hookPosition = 2;
         }
         if(gamepad2.b)
         {
@@ -125,17 +129,28 @@ public class TankTeleOp extends OpMode {
         }
         if(gamepad2.x)
         {
-            shelterPosition = 0;
+            shelterPosition = -1.5;
         }
         if(gamepad2.y)
         {
-            shelterPosition = .5;
+            shelterPosition = 1;
+        }
+
+        if(gamepad2.left_bumper)
+        {
+            climberRightPosition = -.5;
+        }
+        if(gamepad2.right_bumper)
+        {
+            climberRightPosition = .5;
         }
         hookPosition = Range.clip(hookPosition, hook_MIN_RANGE, hook_MAX_RANGE);
         shelterPosition = Range.clip(shelterPosition, shelter_MIN_RANGE, shelter_MAX_RANGE);
+        climberRightPosition = Range.clip(climberRightPosition, climberRight_MIN_RANGE, climberRight_MAX_RANGE);
 
         hook.setPosition(hookPosition);
         shelter.setPosition(shelterPosition);
+        climberRight.setPosition(climberRightPosition);
 
 //        if(gamepad2.dpad_left)
 //        {
