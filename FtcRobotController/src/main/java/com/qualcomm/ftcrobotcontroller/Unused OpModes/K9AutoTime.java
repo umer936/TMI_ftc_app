@@ -150,9 +150,9 @@ public class K9AutoTime extends OpMode {
             right = 0.15;
         } else {
             // after 20.75 seconds, stop.
-            left = 0.0;
-            right = 0.0;
-        }
+			left = 0.0;
+			right = 0.0;
+		}
 
 		/*
 		 * set the motor power

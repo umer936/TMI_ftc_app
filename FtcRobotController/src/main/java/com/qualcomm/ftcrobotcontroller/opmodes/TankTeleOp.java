@@ -17,14 +17,6 @@ public class TankTeleOp extends OpMode {
 //    DcMotor motorIntake;
 
 
-    final static double hook_MIN_RANGE  = 0;
-    final static double hook_MAX_RANGE  = 2;
-    final static double shelter_MIN_RANGE  = -5;
-    final static double shelter_MAX_RANGE  = 5;
-    final static double climberRight_MIN_RANGE = 0;
-    final static double climberRight_MAX_RANGE = 1;
-
-
     //Initialize Servos
     Servo hook;
     //    Servo climberLeft;
@@ -121,7 +113,7 @@ public class TankTeleOp extends OpMode {
 
         if(gamepad2.a)
         {
-            hookPosition = 2;
+            hookPosition = 1;
         }
         if(gamepad2.b)
         {
@@ -129,7 +121,7 @@ public class TankTeleOp extends OpMode {
         }
         if(gamepad2.x)
         {
-            shelterPosition = -1.5;
+            shelterPosition = 0;
         }
         if(gamepad2.y)
         {
@@ -144,9 +136,9 @@ public class TankTeleOp extends OpMode {
         {
             climberRightPosition = .5;
         }
-        hookPosition = Range.clip(hookPosition, hook_MIN_RANGE, hook_MAX_RANGE);
-        shelterPosition = Range.clip(shelterPosition, shelter_MIN_RANGE, shelter_MAX_RANGE);
-        climberRightPosition = Range.clip(climberRightPosition, climberRight_MIN_RANGE, climberRight_MAX_RANGE);
+        hookPosition = Range.clip(hookPosition, 0, 1);
+        shelterPosition = Range.clip(shelterPosition, 0, 1);
+        climberRightPosition = Range.clip(climberRightPosition, 0, 1);
 
         hook.setPosition(hookPosition);
         shelter.setPosition(shelterPosition);
