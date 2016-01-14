@@ -164,7 +164,7 @@ public class TankTeleOp extends OpMode {
 
 
         telemetry.addData("Text", "*** Robot Data***");
-        telemetry.addData("left", "left  pwr: " + String.format("%.2f", left));
+        telemetry.addData("left", "left pwr: " + String.format("%.2f", left));
         telemetry.addData("right", "right pwr: " + String.format("%.2f", right));
         telemetry.addData("Direction", "Direction: " + String.format("%d", direction));
         telemetry.addData("servos:", "hook:" + hookPosition + " shelter:" + shelterPosition + " climberLeft:" + climberLeftPosition + " climberRight:" + climberRightPosition);

@@ -47,6 +47,7 @@ public class Switchback extends OpMode {
         motorIntake = hardwareMap.dcMotor.get("motor_5");
         motorJog = hardwareMap.dcMotor.get("motor_6");
         motorLift = hardwareMap.dcMotor.get("motor_7");
+
         hookLeft = hardwareMap.servo.get("servo_1");
         hookRight = hardwareMap.servo.get("servo_2");
         bucket = hardwareMap.servo.get("servo_3");

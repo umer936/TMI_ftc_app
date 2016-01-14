@@ -33,7 +33,7 @@ public class Auton extends LinearOpMode {
 
         sleep(13000);
 
-        // Go forward for 2 seconds.
+        // Go forward for 4 seconds.
         motorLeft.setPower(1);
         motorRight.setPower(1);
         sleep(4000);
