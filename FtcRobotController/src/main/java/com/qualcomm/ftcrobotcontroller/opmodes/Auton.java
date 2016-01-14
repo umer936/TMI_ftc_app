@@ -17,17 +17,34 @@ public class Auton extends LinearOpMode {
     Servo shelter;
     Servo hook;
 
+
     @Override
-    public void init() {
+    public void runOpMode() throws InterruptedException {
+
+        waitOneFullHardwareCycle();
+
         motorRight = hardwareMap.dcMotor.get("motor_2");
         motorLeft = hardwareMap.dcMotor.get("motor_1");
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        shelter = hardwareMap.servo.get("servo_");
-    }
+        shelter = hardwareMap.servo.get("servo_2");
 
-    @Override
-    public void start() {
+        waitOneFullHardwareCycle();
 
+        sleep(13000);
+
+        // Go forward for 2 seconds.
+        motorLeft.setPower(1);
+        motorRight.setPower(1);
+        sleep(4000);
+//
+//        //turn left for 1 second.
+//        motorLeft.setPower(-1);
+//        motorRight.setPower(1);
+//        sleep(1000);
+        
+        telemetry.addData("Speed", " Left=" + motorLeft.getPower() + " Right=" + motorRight.getPower());
+
+        waitOneFullHardwareCycle();
     }
 }

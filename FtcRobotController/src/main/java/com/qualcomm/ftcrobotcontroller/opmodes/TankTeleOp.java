@@ -17,11 +17,12 @@ public class TankTeleOp extends OpMode {
 //    DcMotor motorIntake;
 
 
-    //Initialize Servos
+    // Initialize Servos
     Servo hook;
-    //    Servo climberLeft;
+    Servo climberLeft;
     Servo climberRight;
     Servo shelter;
+
     public Boolean aToggle = false; //part of the toggle for the a button
     float intake = 0;
     public int direction = 1;
@@ -29,6 +30,7 @@ public class TankTeleOp extends OpMode {
     double hookPosition;
     double shelterPosition;
     double climberRightPosition;
+    double climberLeftPosition; 
 
     public TankTeleOp() {
 
@@ -36,14 +38,17 @@ public class TankTeleOp extends OpMode {
 
     @Override
     public void init() {
-	    motorRight = hardwareMap.dcMotor.get("motor_2");
-        motorLeft = hardwareMap.dcMotor.get("motor_1");
+	    motorRight = hardwareMap.dcMotor.get("motor_1");
+        motorLeft = hardwareMap.dcMotor.get("motor_2");
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
 //        motorIntake = hardwareMap.dcMotor.get("motor_3");
-//        climberLeft = hardwareMap.servo.get("servo_1");
+        
+        climberLeft = hardwareMap.servo.get("servo_1");
         climberRight = hardwareMap.servo.get("servo_2");
         shelter = hardwareMap.servo.get("servo_4");
         hook = hardwareMap.servo.get("servo_3");
+
+        shelter.setPosition(0);
     }
 
 
@@ -130,34 +135,39 @@ public class TankTeleOp extends OpMode {
 
         if(gamepad2.left_bumper)
         {
-            climberRightPosition = -.5;
+            climberRightPosition = .75;
         }
         if(gamepad2.right_bumper)
         {
-            climberRightPosition = .5;
+            climberRightPosition = 0;
         }
+
+        if(gamepad2.left_stick_button)
+        {
+           climberLeftPosition = .75;
+        }
+        if(gamepad2.right_stick_button)
+        {
+           climberLeftPosition = 0;
+        }
+
+
         hookPosition = Range.clip(hookPosition, 0, 1);
         shelterPosition = Range.clip(shelterPosition, 0, 1);
         climberRightPosition = Range.clip(climberRightPosition, 0, 1);
+        climberLeftPosition = Range.clip(climberLeftPosition, 0, 1);
 
         hook.setPosition(hookPosition);
         shelter.setPosition(shelterPosition);
         climberRight.setPosition(climberRightPosition);
-
-//        if(gamepad2.dpad_left)
-//        {
-//            climberLeft.setPosition(.7);
-//        }
-//        if(gamepad2.dpad_right)
-//        {
-//            climberRight.setPosition(.7);
-//        }
+        climberLeft.setPosition(climberLeftPosition); 
 
 
         telemetry.addData("Text", "*** Robot Data***");
         telemetry.addData("left", "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right", "right pwr: " + String.format("%.2f", right));
         telemetry.addData("Direction", "Direction: " + String.format("%d", direction));
+        telemetry.addData("servos:", "hook:" + hookPosition + " shelter:" + shelterPosition + " climberLeft:" + climberLeftPosition + " climberRight:" + climberRightPosition);
 
 
     }
