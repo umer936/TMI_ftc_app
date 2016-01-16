@@ -14,6 +14,8 @@ public class TankTeleOp extends OpMode {
     // Initialize Motors
     DcMotor motorRight;
     DcMotor motorLeft;
+    DcMotor lift1;
+    DcMotor lift2;
 //    DcMotor motorIntake;
 
 
@@ -42,6 +44,10 @@ public class TankTeleOp extends OpMode {
         motorLeft = hardwareMap.dcMotor.get("motor_2");
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
 //        motorIntake = hardwareMap.dcMotor.get("motor_3");
+
+        lift1 = hardwareMap.dcMotor.get("motor_3");
+        lift2 = hardwareMap.dcMotor.get("motor_4");
+        lift2.setDirection(DcMotor.Direction.REVERSE);
         
         climberLeft = hardwareMap.servo.get("servo_1");
         climberRight = hardwareMap.servo.get("servo_2");
@@ -57,6 +63,7 @@ public class TankTeleOp extends OpMode {
         //trying to get an intake to run. Idk what I'm doing someone will have to check later.
         float right = gamepad1.left_stick_y;
         float left = gamepad1.right_stick_y;
+        float lift1s, lift2s;
         //float intake;
 
         if(gamepad1.start)
@@ -106,6 +113,17 @@ public class TankTeleOp extends OpMode {
         right = (float)scaleInput(right);
         left = (float)scaleInput(left);
 
+        lift1s = Range.clip(gamepad2.left_stick_y, -1, 1);
+        lift2s = Range.clip(gamepad2.right_stick_y, -1, 1);
+
+
+        // scale the joystick value to make it easier to control
+        // the robot more precisely at slower speeds.
+        lift1s = (float)scaleInput(lift1s);
+        lift2s = (float)scaleInput(lift2s);
+
+
+
         if(direction == 1)
         {
             right = -right;
@@ -115,6 +133,12 @@ public class TankTeleOp extends OpMode {
         // write the values to the motors
         motorRight.setPower(left);
         motorLeft.setPower(right);
+
+
+        // write the values to the motors
+        lift1.setPower(lift1s);
+        lift2.setPower(lift2s);
+
 
         if(gamepad2.a)
         {

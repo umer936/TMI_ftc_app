@@ -57,7 +57,7 @@ public class FtcOpModeRegister implements OpModeRegister {
 
     manager.register("TankTeleOp", TankTeleOp.class);
     manager.register("Auton", Auton.class);
-    manager.register("Switchback", Switchback.class);
+//    manager.register("Switchback", Switchback.class);
 
   }
 }
