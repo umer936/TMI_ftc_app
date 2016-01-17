@@ -37,8 +37,8 @@ public class Switchback extends OpMode {
     public boolean skiToggle = false;
 
     //Initialization positions for Servos
-    double hookLeftInit = 0.0;
-    double hookRightInit = 1.0;
+    double hookLeftInit = 1.0;
+    double hookRightInit = 0.0;
     double shelterPeopleInit = 0.5;
     double bucketInit = 1.0;
     double intakeHeightInit = 0.5;
@@ -55,10 +55,10 @@ public class Switchback extends OpMode {
     float intakeSpeed = 1;
 
     //Original and Deployed Position Variables
-    double hookRightOriginal = 0.5;
+    double hookRightOriginal = 1.0;
     double hookRightDeployed = 1.0;
 
-    double hookLeftOriginal = 0.5;
+    double hookLeftOriginal = 0.0;
     double hookLeftDeployed = 0.0;
 
     double bucketOriginal = 1.0;
