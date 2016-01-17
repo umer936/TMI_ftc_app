@@ -55,9 +55,11 @@ public class FtcOpModeRegister implements OpModeRegister {
      * If two or more op modes are registered with the same name, the app will display an error.
      */
 
-    manager.register("TankTeleOp", TankTeleOp.class);
-    manager.register("Auton", Auton.class);
-    manager.register("Switchback", Switchback.class);
+//    manager.register("TankTeleOp", TankTeleOp.class);
+//    manager.register("Auton", Auton.class);
+//    manager.register("Switchback", Switchback.class);
+    manager.register("NewSwitchback", NewSwitchback.class);
+//    manager.register("SwitchbackTest", SwitchbackTest.class);
 
   }
 }
