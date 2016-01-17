@@ -59,6 +59,7 @@ public class FtcOpModeRegister implements OpModeRegister {
 //    manager.register("Auton", Auton.class);
 //    manager.register("Switchback", Switchback.class);
     manager.register("NewSwitchback", NewSwitchback.class);
+    manager.register("Animatronio", Animatronio.class);
 //    manager.register("SwitchbackTest", SwitchbackTest.class);
 
   }
