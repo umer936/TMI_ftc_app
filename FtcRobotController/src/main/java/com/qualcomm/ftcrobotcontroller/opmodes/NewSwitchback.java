@@ -79,8 +79,8 @@ public class NewSwitchback extends OpMode {
 
         // Hooks
         if(gamepad2.x){
-            hookRight.setPosition(0.75);
-            hookLeft.setPosition(0.4);
+            hookRight.setPosition(0.6);
+            hookLeft.setPosition(0.25);
         }
         if(gamepad2.y){            
             hookRight.setPosition(0.0);
@@ -88,8 +88,8 @@ public class NewSwitchback extends OpMode {
         }
         // Skis 
         if(gamepad2.dpad_down){
-            leftSki.setPosition(0.0);
-            rightSki.setPosition(1.0);
+            leftSki.setPosition(0.5);
+            rightSki.setPosition(0.5);
         }
         if(gamepad2.dpad_up){
             leftSki.setPosition(1.0);
@@ -101,6 +101,7 @@ public class NewSwitchback extends OpMode {
         telemetry.addData("Text", "*** Robot Data***");
         telemetry.addData("left", "left pwr: " + String.format("%.2f", driverLeft));
         telemetry.addData("right", "right pwr: " + String.format("%.2f", driverRight));
+
 
     }
 
