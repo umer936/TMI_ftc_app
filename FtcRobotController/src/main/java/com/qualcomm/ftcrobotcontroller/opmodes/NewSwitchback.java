@@ -51,7 +51,7 @@ public class NewSwitchback extends OpMode {
 
         // Initialize Servos 
         hookRight.setPosition(0.0); 
-        hookLeft.setPosition(1.0); 
+        hookLeft.setPosition(0.85);
         leftSki.setPosition(0.5);
         rightSki.setPosition(0.5);
 
@@ -79,8 +79,8 @@ public class NewSwitchback extends OpMode {
 
         // Hooks
         if(gamepad2.x){
-            hookRight.setPosition(0.5);
-            hookLeft.setPosition(0.5);
+            hookRight.setPosition(0.75);
+            hookLeft.setPosition(0.4);
         }
         if(gamepad2.y){            
             hookRight.setPosition(0.0);
@@ -88,12 +88,12 @@ public class NewSwitchback extends OpMode {
         }
         // Skis 
         if(gamepad2.dpad_down){
-            leftSki.setPosition(0.5);
-            rightSki.setPosition(0.5);
+            leftSki.setPosition(0.0);
+            rightSki.setPosition(1.0);
         }
         if(gamepad2.dpad_up){
-            leftSki.setPosition(0.5);
-            rightSki.setPosition(0.5);
+            leftSki.setPosition(1.0);
+            rightSki.setPosition(0.0);
         }
 
 
