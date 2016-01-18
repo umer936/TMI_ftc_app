@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 /**
  * Created by luke on 1/17/2016.
  */
-public class Animatronio extends LinearOpMode{
+public class Animatronio2 extends LinearOpMode{
     // Motors
     DcMotor driveRight;
     DcMotor driveLeft;
@@ -54,14 +54,14 @@ public class Animatronio extends LinearOpMode{
         driveRight.setPower(1);
         sleep(3000);
 
-        //turn left for 1 second.
-        driveLeft.setPower(-1);
-        driveRight.setPower(1);
+        //turn right for 1 second.
+        driveLeft.setPower(1);
+        driveRight.setPower(-1);
         sleep(1000);
 
-        //turn right for half a second
-        driveLeft.setPower(-1);
-        driveRight.setPower(1);
+        //turn left for half a second
+        driveLeft.setPower(1);
+        driveRight.setPower(-1);
         sleep(500);
 
 
@@ -70,6 +70,7 @@ public class Animatronio extends LinearOpMode{
         driveRight.setPower(1);
         sleep(2500);
 
+        //hook into the bar and turn off the motors
         hookRight.setPosition(0.6);
         hookLeft.setPosition(0.25);
         sleep(500);
