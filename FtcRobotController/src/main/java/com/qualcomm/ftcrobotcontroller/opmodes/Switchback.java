@@ -15,68 +15,273 @@ public class Switchback extends OpMode {
     DcMotor motorLeft;
     DcMotor motor118R;
     DcMotor motor118L;
-    DcMotor motorLift;
-    DcMotor motorJog;
+
+    DcMotor motorLeftWinch;
+    DcMotor motorRightWinch;
     DcMotor motorIntake;
     Servo hookRight;
     Servo hookLeft;
-    Servo bucket;
-    Servo intakeHeight;
-    Servo shelterPeople;
+    //Servo bucket;
+    Servo leftSki;
+    Servo rightSki;
+    //Servo intakeHeight;
+    //Servo shelterPeople;
+
+
 
     // Toggle variables
     public boolean bucketToggle = false;
     public boolean shelterPeopleToggle = false;
     public boolean hookToggle = false;
+    public boolean intakeHeightToggle = false;
+    public boolean skiToggle = false;
 
-    // Initialize toggle variables' positions
-    double hookPosition;
-    double shelterPosition;
-    double bucketPosition;
+    //Initialization positions for Servos
+    double hookLeftInit = 1.0;
+    double hookRightInit = 0.0;
+    double shelterPeopleInit = 0.5;
+    double bucketInit = 1.0;
+    double intakeHeightInit = 0.5;
+    double leftSkiInit = 0.5;
+    double rightSkiInit = 0.5;
 
-    // Constructor
-    Switchback(){}
+    //Multipliers for speed modifications
+    float multiplierDrive = 1;
+    float multiplier118 = 1;
+    float multiplierLift = 1;
+    float multiplierJog = 1;
+
+    //Speed for fixed-speed intake
+    float intakeSpeed = 1;
+
+    //Original and Deployed Position Variables
+    double hookRightOriginal = 1.0;
+    double hookRightDeployed = 1.0;
+
+    double hookLeftOriginal = 0.0;
+    double hookLeftDeployed = 0.0;
+
+    double bucketOriginal = 1.0;
+    double bucketDeployed = 0.5;
+
+    double intakeHeightOriginal = 1;
+    double intakeHeightDeployed = 0;
+
+    double shelterPeopleOriginal = 1;
+    double shelterPeopleDeployed = 0;
+
+    double leftSkiOriginal = 0.5;
+    double leftSkiDeployed = 0.5;
+
+    double rightSkiOriginal = 0.5;
+    double rightSkiDeployed = 0.5;
+
+    float driverRight;
+    float driverLeft;
+    float operatorRight;
+    float operatorLeft;
+    boolean operatorX;
+    float operatorTriggerLeft;
+    float operatorTriggerRight;
+    boolean operatorBumperRight;
+    boolean operatorBumperLeft;
+    boolean operatorDpadUP;
+    boolean operatorDpadDOWN;
+
+
 
     @Override
     public void init(){
-        // We dont know which is really which yet
-        motorRight = hardwareMap.dcMotor.get("motor_1");
-        motorLeft = hardwareMap.dcMotor.get("motor_2");
-        motor118L = hardwareMap.dcMotor.get("motor_3");
-        motor118R = hardwareMap.dcMotor.get("motor_4");
-        motorIntake = hardwareMap.dcMotor.get("motor_5");
-        motorJog = hardwareMap.dcMotor.get("motor_6");
-        motorLift = hardwareMap.dcMotor.get("motor_7");
+        // Define Motor mapping to variables
+        motorRight = hardwareMap.dcMotor.get("right");
+        motorLeft = hardwareMap.dcMotor.get("left");
+        motor118L = hardwareMap.dcMotor.get("118L");
+        motor118R = hardwareMap.dcMotor.get("118R");
+        motor118R.setDirection(DcMotor.Direction.REVERSE);
+        //motorIntake = hardwareMap.dcMotor.get("motor_8");
+        //motorLeftWinch = hardwareMap.dcMotor.get("motor_7");
+        //motorRightWinch = hardwareMap.dcMotor.get("motor 3");
 
-        hookLeft = hardwareMap.servo.get("servo_1");
-        hookRight = hardwareMap.servo.get("servo_2");
-        bucket = hardwareMap.servo.get("servo_3");
-        intakeHeight = hardwareMap.servo.get("servo_4");
-        shelterPeople = hardwareMap.servo.get("servo_5");
+        //Define Servo mapping to variables
+        hookLeft = hardwareMap.servo.get("hookleft");
+        hookRight = hardwareMap.servo.get("hookright");
+        leftSki = hardwareMap.servo.get("leftski");
+        rightSki = hardwareMap.servo.get("rightski");
+
+//        bucket = hardwareMap.servo.get("servo_3");
+//        intakeHeight = hardwareMap.servo.get("servo_4");
+//        shelterPeople = hardwareMap.servo.get("servo_5");
+
+        //Initialize the positions of the servos
+        hookRight.setPosition(hookRightInit);
+        hookLeft.setPosition(hookLeftInit);
+        //bucket.setPosition(bucketInit);
+        rightSki.setPosition(rightSkiInit);
+        leftSki.setPosition(leftSkiInit);
+        //intakeHeight.setPosition(intakeHeightInit);
+        //shelterPeople.setPosition(shelterPeopleInit);
+
+
+
     }
 
     @Override
     public void loop() {
-        float right = gamepad1.left_stick_y;
-        float left = gamepad1.right_stick_y;
+        //Map controllers to variables
+        driverRight = gamepad1.right_stick_y;
+        driverLeft = gamepad1.left_stick_y;
+        operatorRight = gamepad2.right_stick_y;
+        operatorLeft = gamepad2.left_stick_y;
+//        float driverTriggerRight = gamepad1.right_trigger;
+//        float driverTriggerLeft = gamepad1.left_trigger;
+        operatorX = gamepad2.x;
+        boolean operatorY = gamepad2.y;
+        boolean operatorA = gamepad2.a;
+        boolean operatorB = gamepad2.b;
+        operatorTriggerRight = gamepad2.right_trigger;
+        operatorTriggerLeft = gamepad2.left_trigger;
+        operatorBumperRight = gamepad2.right_bumper;
+        operatorBumperLeft = gamepad2.left_bumper;
+        operatorDpadUP = gamepad2.dpad_up;
+        operatorDpadDOWN = gamepad2.dpad_down;
+
+
+
+
 
         // clip the right/left values so that the values never exceed +/- 1
-        right = Range.clip(right, -1, 1);
-        left = Range.clip(left, -1, 1);
+        driverRight = Range.clip(driverRight, -1, 1);
+        driverLeft = Range.clip(driverLeft, -1, 1);
+        operatorRight = Range.clip(operatorRight, -1, 1);
+        operatorLeft = Range.clip(operatorLeft, -1, 1);
+
+
 
 
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
-        right = (float)scaleInput(right);
-        left = (float)scaleInput(left);
+        driverRight = (float)scaleInput(driverRight);
+        driverLeft = (float)scaleInput(driverLeft);
+        operatorRight = (float)scaleInput(operatorRight);
+        operatorLeft = (float)scaleInput(operatorLeft);
+
 
         // write the values to the motors
-        motorRight.setPower(left);
-        motorLeft.setPower(right);
+        motorRight.setPower(driverRight);
+        motorLeft.setPower(driverLeft);
+        //motorLeftWinch.setPower(operatorLeft*multiplierLift);
+        //motorRightWinch.setPower(operatorLeft*multiplierLift);
+
+        motor118R.setPower(operatorLeft);
+        motor118L.setPower(operatorLeft);
+
+        //Operator X for front hook position
+        if(operatorX)
+        {
+            if(hookToggle == false)
+            {
+                hookLeft.setPosition(hookLeftDeployed);
+                hookRight.setPosition(hookRightDeployed);
+                hookToggle = true;
+            }
+            else if(hookToggle == true)
+            {
+                hookLeft.setPosition(hookLeftOriginal);
+                hookRight.setPosition(hookRightOriginal);
+                hookToggle = false;
+            }
+        }
+
+        //Operator Y for Shelter people
+//        if(operatorY)
+//        {
+//            if(shelterPeopleToggle == false)
+//            {
+//                shelterPeople.setPosition(shelterPeopleDeployed);
+//                shelterPeopleToggle = true;
+//            }
+//            else if(shelterPeopleToggle == true)
+//            {
+//                shelterPeople.setPosition(shelterPeopleOriginal);
+//                shelterPeopleToggle = false;
+//            }
+//        }
+//
+//
+//        //Operator A for hold/score with bucket
+//        if(operatorA)
+//        {
+//            if(bucketToggle == false)
+//            {
+//                bucket.setPosition(bucketDeployed);
+//                bucketToggle = true;
+//            }
+//            else if(bucketToggle == true)
+//            {
+//                bucket.setPosition(bucketOriginal);
+//                bucketToggle = false;
+//            }
+//        }
+
+//
+//
+//        if(operatorB)
+//        {
+//            if(intakeHeightToggle == false)
+//            {
+//                intakeHeight.setPosition(intakeHeightDeployed);
+//                intakeHeightToggle = true;
+//            }
+//            else if(intakeHeightToggle == true)
+//            {
+//                intakeHeight.setPosition(intakeHeightOriginal);
+//                intakeHeightToggle = false;
+//            }
+//        }
+
+
+
+//        //Operator triggers for Jog
+//        if(operatorTriggerLeft> 0)
+//        {
+//            motorJog.setPower(-operatorTriggerLeft*multiplierJog);
+//        }
+//        if(operatorTriggerRight> 0)
+//        {
+//            motorJog.setPower(operatorTriggerRight*multiplierJog);
+//        }
+//        else
+//        {
+//            motorJog.setPower(0);
+//        }
+//
+//        //Operator bumpers for intake
+//        if(operatorBumperLeft)
+//        {
+//            motorIntake.setPower(-intakeSpeed);
+//        }
+//        if(operatorBumperRight)
+//        {
+//            motorIntake.setPower(intakeSpeed);
+//        }
+//        else
+//        {
+//            motorIntake.setPower(0);
+//        }
+//
+        //Operator DPAD for Skis
+        if(operatorDpadDOWN)
+        {
+            leftSki.setPosition(leftSkiDeployed);
+            rightSki.setPosition(rightSkiDeployed);
+        }
+        if(operatorDpadUP)
+        {
+            leftSki.setPosition(leftSkiOriginal);
+            rightSki.setPosition(rightSkiOriginal);
+            }
+
     }
-
-
-
 
 
 
@@ -113,6 +318,4 @@ public class Switchback extends OpMode {
 
         return dScale;
     }
-    @Override
-    public void stop(){}
 }
