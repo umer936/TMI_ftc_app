@@ -12,6 +12,10 @@ import com.qualcomm.robotcore.util.Range;
 public class DriveTrain_Alex extends OpMode {
     DcMotor motorRight;
     DcMotor motorLeft;
+    DcMotor motorExtend;
+    Servo Aiming;
+    Servo Stick;
+//    DcMotor motorCannon;
 
  //  final static double climberRight_MIN_RANGE = 0;
    // final static double climberRight_MAX_RANGE = 1;
@@ -21,25 +25,37 @@ public class DriveTrain_Alex extends OpMode {
    // Servo climberRight;
    // Servo climberLeft;
     public int direction = 1;
+  //  public float cannonPower = 0;
+    public float right;
+    public float left;
+    public float extend;
+    public float aimAngle = (float)0.9;
+    public float aimAngleChange = (float).005;
+    public float stickAngle = (float)0.5;
+    public float stickAngleChange = (float).005;
+    //public float rescuelclimbers //controlls a the servo that the climbers are attached to.
 
     //double climberRightPosition;
     //double climberLeftPosition;
-
-    public DriveTrain_Alex (){
+;
+    public DriveTrain_Alex(){
 
     }
 
     @Override
-    public void init() {
-        motorRight = hardwareMap.dcMotor.get("motor_2");
-        motorLeft = hardwareMap.dcMotor.get("motor_1");
-        motorLeft.setDirection(DcMotor.Direction.REVERSE);
-    }
 
+    public void init() {
+        motorRight = hardwareMap.dcMotor.get("motor_1");
+        motorLeft = hardwareMap.dcMotor.get("motor_2");
+        motorExtend = hardwareMap.dcMotor.get("motor_3");
+        motorLeft.setDirection(DcMotor.Direction.REVERSE);
+        Aiming = hardwareMap.servo.get("servo 1");
+        Stick = hardwareMap.servo.get("servo 2");
+    }
     @Override
     public void loop() {
-        float right = gamepad1.left_stick_y;
-        float left = gamepad1.right_stick_y;
+        right = gamepad1.left_stick_y;
+        left = gamepad1.right_stick_y;
 
         if (gamepad1.start) {
             if (direction == 0) {
@@ -61,8 +77,53 @@ public class DriveTrain_Alex extends OpMode {
             left = -left;
         }
 
+
+        /*if (gamepad2.a) {
+            if (direction == 0) {
+                direction = 1;
+            } else {
+                direction = 0;
+            }
+        }*/
+
+        if (gamepad1.a) {
+            extend = 1;
+        } else if (gamepad1.b) {
+            extend = -1;
+        } else {
+            extend = 0;
+        }
+
+        if (gamepad1.y) {
+            aimAngle += aimAngleChange;
+            if (aimAngle>1){
+                aimAngle=1;
+            }
+        } else if (gamepad1.x) {
+            aimAngle -= aimAngleChange;
+            if (aimAngle<0){
+                aimAngle=0;
+            }
+        }
+
+        if (gamepad1.right_bumper) {
+            stickAngle += stickAngleChange;
+            if (stickAngle>1){
+                stickAngle=1;
+            }
+        } else if (gamepad1.left_bumper) {
+            stickAngle -= stickAngleChange;
+            if (stickAngle<0){
+                stickAngle=0;
+            }
+        }
+
+        Aiming.setPosition(aimAngle);
         motorRight.setPower(left);
         motorLeft.setPower(right);
+        motorExtend.setPower(extend);
+        Stick.setPosition(stickAngle);
+
 
         /*if (gamepad2.b)
         {
@@ -92,6 +153,7 @@ public class DriveTrain_Alex extends OpMode {
         telemetry.addData("left", "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right", "right pwr: " + String.format("%.2f", right));
         telemetry.addData("Direction", "Direction: " + String.format("%d", direction));
+        telemetry.addData("angle", "Direction: " + String.format("%.4f", aimAngle));
     }
 
     double scaleInput(double dVal)  {

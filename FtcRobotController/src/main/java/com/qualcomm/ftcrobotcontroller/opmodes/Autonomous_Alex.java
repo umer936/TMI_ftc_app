@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
+
 public class Autonomous_Alex extends LinearOpMode {
 
     DcMotor motorRight;
@@ -28,15 +29,22 @@ public class Autonomous_Alex extends LinearOpMode {
 
         motorRight.setPower(1);
         motorLeft.setPower(1);
-        sleep(9000);
-
+        sleep(4000);
         motorRight.setPower(1);
+        motorLeft.setPower(0.3);
+        sleep(1500);
+        motorRight.setPower(1);
+        motorLeft.setPower(1);
+
+
+        /*motorRight.setPower(1);
         motorLeft.setPower(-1);
         sleep(2000);
 
         motorRight.setPower(1);
         motorLeft.setPower(1);
         sleep(8000);
+        */
 
         motorRight.setPower(0);
         motorLeft.setPower(0);

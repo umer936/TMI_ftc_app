@@ -9,12 +9,12 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by umer936 on 10/26/15.
  */
-public class TankTeleOp extends OpMode {
+public class SimpleOp extends OpMode {
 
     // Initialize Motors
     DcMotor motorRight;
     DcMotor motorLeft;
-//    DcMotor motorIntake;
+    //    DcMotor motorIntake;
     DcMotor winchRight;
     DcMotor winchLeft;
 
@@ -32,26 +32,26 @@ public class TankTeleOp extends OpMode {
 
     double hookRightPosition;
     double hookLeftPosition;
-    double shelterPosition = .5;
+    double shelterPosition = 1;
     //double shelterPosition;
     //double climberRightPosition;
     //double climberLeftPosition;
 
-    public TankTeleOp() {
+    public SimpleOp() {
 
     }
 
     @Override
     public void init() {
-	    motorRight = hardwareMap.dcMotor.get("motorRight");
+        motorRight = hardwareMap.dcMotor.get("motorRight");
         motorLeft = hardwareMap.dcMotor.get("motorLeft");
-        motorRight.setDirection(DcMotor.Direction.REVERSE);
+        //motorLeft.setDirection(DcMotor.Direction.REVERSE);
 //        motorIntake = hardwareMap.dcMotor.get("motor_3");
         winchRight = hardwareMap.dcMotor.get("winchRight");
         winchLeft = hardwareMap.dcMotor.get("winchLeft");
         winchLeft.setDirection(DcMotor.Direction.REVERSE);
-        
-       // climberLeft = hardwareMap.servo.get("servo_1");
+
+        // climberLeft = hardwareMap.servo.get("servo_1");
         //climberRight = hardwareMap.servo.get("servo_2");
         //shelter = hardwareMap.servo.get("servo_4");
         hookRight = hardwareMap.servo.get("hookRight");
@@ -69,7 +69,7 @@ public class TankTeleOp extends OpMode {
         float left = gamepad1.right_stick_y;
         //float intake;
 
-/*
+
         // to flip directions.
         if(gamepad1.start)
         {
@@ -82,7 +82,7 @@ public class TankTeleOp extends OpMode {
                 direction = 0;
             }
 
-        }*/
+        }
 
         /*if(gamepad1.a == true)
         {
@@ -120,13 +120,13 @@ public class TankTeleOp extends OpMode {
 
         if(direction == 1)
         {
-            left = -left;
-            right = -right;
+            right = -left;
+            left = -right;
         }
 
         // write the values to the motors
         motorRight.setPower(left);
-        motorLeft.setPower(right);
+        motorLeft.setPower(-right);
 
         if(gamepad2.right_trigger > 0.5)
         {
@@ -134,10 +134,10 @@ public class TankTeleOp extends OpMode {
             winchLeft.setPower(1);
         }
         else if (gamepad2.left_trigger > 0.5)
-                {
-                        winchRight.setPower(-1);
-                        winchLeft.setPower(-1);
-                }
+        {
+            winchRight.setPower(-1);
+            winchLeft.setPower(-1);
+        }
         else
         {
             winchRight.setPower(0);
@@ -156,11 +156,11 @@ public class TankTeleOp extends OpMode {
         }
         if(gamepad2.left_bumper)
         {
-            shelterPosition = .5;
+            shelterPosition = .25;
         }
         if(gamepad2.right_bumper)
         {
-            shelterPosition = .25;
+            shelterPosition = 1;
         }
 
         /*
