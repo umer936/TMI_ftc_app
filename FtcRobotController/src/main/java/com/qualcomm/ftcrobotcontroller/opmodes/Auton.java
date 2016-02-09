@@ -23,26 +23,31 @@ public class Auton extends LinearOpMode {
 
         waitOneFullHardwareCycle();
 
-        motorRight = hardwareMap.dcMotor.get("motor_2");
-        motorLeft = hardwareMap.dcMotor.get("motor_1");
+        motorRight = hardwareMap.dcMotor.get("motorRight");
+        motorLeft = hardwareMap.dcMotor.get("motorLeft");
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        shelter = hardwareMap.servo.get("servo_2");
+//        shelter = hardwareMap.servo.get("servo_2");
 
         waitOneFullHardwareCycle();
 
-        sleep(13000);
+        sleep(17000);
+
+        waitOneFullHardwareCycle();
 
         // Go forward for 4 seconds.
         motorLeft.setPower(1);
         motorRight.setPower(1);
-        sleep(4000);
-//
-//        //turn left for 1 second.
-//        motorLeft.setPower(-1);
-//        motorRight.setPower(1);
-//        sleep(1000);
-        
+        sleep(3000);
+
+        waitForNextHardwareCycle();
+
+        motorLeft.setPower(0);
+        motorRight.setPower(0);
+        sleep(1000);
+
+        waitForNextHardwareCycle();
+
         telemetry.addData("Speed", " Left=" + motorLeft.getPower() + " Right=" + motorRight.getPower());
 
         waitOneFullHardwareCycle();

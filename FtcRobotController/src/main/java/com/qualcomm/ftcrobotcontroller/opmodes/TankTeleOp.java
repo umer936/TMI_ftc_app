@@ -32,7 +32,7 @@ public class TankTeleOp extends OpMode {
 
     double hookRightPosition;
     double hookLeftPosition;
-    double shelterPosition = .5;
+    double shelterPosition = 0;
     //double shelterPosition;
     //double climberRightPosition;
     //double climberLeftPosition;
@@ -49,7 +49,7 @@ public class TankTeleOp extends OpMode {
 //        motorIntake = hardwareMap.dcMotor.get("motor_3");
         winchRight = hardwareMap.dcMotor.get("winchRight");
         winchLeft = hardwareMap.dcMotor.get("winchLeft");
-        winchLeft.setDirection(DcMotor.Direction.REVERSE);
+        winchRight.setDirection(DcMotor.Direction.REVERSE);
         
        // climberLeft = hardwareMap.servo.get("servo_1");
         //climberRight = hardwareMap.servo.get("servo_2");
@@ -67,6 +67,7 @@ public class TankTeleOp extends OpMode {
         //trying to get an intake to run. Idk what I'm doing someone will have to check later.
         float right = gamepad1.left_stick_y;
         float left = gamepad1.right_stick_y;
+        float opleft = gamepad2.left_stick_y;
         //float intake;
 
 /*
@@ -111,38 +112,27 @@ public class TankTeleOp extends OpMode {
         // clip the right/left values so that the values never exceed +/- 1
         right = Range.clip(right, -1, 1);
         left = Range.clip(left, -1, 1);
+        opleft = Range.clip(opleft, -1, 1);
 
 
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
         right = (float)scaleInput(right);
         left = (float)scaleInput(left);
+        opleft = (float)scaleInput(opleft);
 
         if(direction == 1)
         {
-            left = -left;
-            right = -right;
+//            left = -left;
+//            right = -right;
         }
 
         // write the values to the motors
-        motorRight.setPower(left);
-        motorLeft.setPower(right);
+        motorRight.setPower(-left);
+        motorLeft.setPower(-right);
 
-        if(gamepad2.right_trigger > 0.5)
-        {
-            winchRight.setPower(1);
-            winchLeft.setPower(1);
-        }
-        else if (gamepad2.left_trigger > 0.5)
-                {
-                        winchRight.setPower(-1);
-                        winchLeft.setPower(-1);
-                }
-        else
-        {
-            winchRight.setPower(0);
-            winchLeft.setPower(0);
-        }
+        winchLeft.setPower(opleft);
+        winchRight.setPower(opleft);
 
         if(gamepad2.a)
         {
@@ -156,11 +146,11 @@ public class TankTeleOp extends OpMode {
         }
         if(gamepad2.left_bumper)
         {
-            shelterPosition = .5;
+            shelterPosition = 1;
         }
         if(gamepad2.right_bumper)
         {
-            shelterPosition = .25;
+            shelterPosition = 0;
         }
 
         /*
@@ -193,7 +183,7 @@ public class TankTeleOp extends OpMode {
         telemetry.addData("right", "right pwr: " + String.format("%.2f", right));
         telemetry.addData("Direction", "Direction: " + String.format("%d", direction));
         telemetry.addData("servos:", "hookRight:" + hookRightPosition + "hookLeft:"+ hookLeftPosition+" shelter:" + shelterPosition);
-
+        telemetry.addData("Lift", "Sending=" + String.format("%.2f",opleft) + " Left=" + winchLeft.getPower() + " Right=" + winchRight.getPower());
 
     }
 

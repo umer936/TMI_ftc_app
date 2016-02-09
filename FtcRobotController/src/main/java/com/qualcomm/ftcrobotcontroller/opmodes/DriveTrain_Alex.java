@@ -24,15 +24,17 @@ public class DriveTrain_Alex extends OpMode {
 
    // Servo climberRight;
    // Servo climberLeft;
-    public int direction = 1;
   //  public float cannonPower = 0;
+    public int direction = 1;
+    public int directionCounter = 0;
     public float right;
     public float left;
     public float extend;
-    public float aimAngle = (float)0.9;
+    public float aimAngle = (float)1.0;
     public float aimAngleChange = (float).005;
-    public float stickAngle = (float)0.5;
-    public float stickAngleChange = (float).005;
+    public float stickAngle = (float)0.0;
+    public float stickAngleChange = (float).007;
+
     //public float rescuelclimbers //controlls a the servo that the climbers are attached to.
 
     //double climberRightPosition;
@@ -57,14 +59,23 @@ public class DriveTrain_Alex extends OpMode {
         right = gamepad1.left_stick_y;
         left = gamepad1.right_stick_y;
 
-        if (gamepad1.start) {
+        /*if (gamepad1.start) {
             if (direction == 0) {
                 direction = 1;
             } else {
                 direction = 0;
             }
+        }*/
+
+        if (gamepad1.start) {
+            directionCounter += 1;
+        } else {
+            directionCounter = 0;
         }
 
+        if (directionCounter==1){
+            direction = 1 - direction;
+        }
 
         right = Range.clip(right, -1, 1);
         left = Range.clip(left, -1, 1);
@@ -118,10 +129,10 @@ public class DriveTrain_Alex extends OpMode {
             }
         }
 
-        Aiming.setPosition(aimAngle);
         motorRight.setPower(left);
         motorLeft.setPower(right);
         motorExtend.setPower(extend);
+        Aiming.setPosition(aimAngle);
         Stick.setPosition(stickAngle);
 
 
