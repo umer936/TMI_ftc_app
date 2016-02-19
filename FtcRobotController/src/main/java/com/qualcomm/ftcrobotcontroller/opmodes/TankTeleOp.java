@@ -14,28 +14,27 @@ public class TankTeleOp extends OpMode {
     // Initialize Motors
     DcMotor motorRight;
     DcMotor motorLeft;
-//    DcMotor motorIntake;
+
     DcMotor winchRight;
     DcMotor winchLeft;
 
+//    DcMotor Lift;
+//    DcMotor Intake;
 
     // Initialize Servos
     Servo hookRight;
     Servo hookLeft;
-    //Servo climberLeft;
-    //Servo climberRight;
     Servo shelter;
+    Servo arm;
+    Servo triggerRight;
+    Servo triggerLeft;
+//    Servo gate;
 
-    //public Boolean aToggle = false; //part of the toggle for the a button
-    //float intake = 0;
-    public int direction = 1;
-
-    double hookRightPosition;
+    double hookRightPosition = 1;
     double hookLeftPosition;
     double shelterPosition = 0;
-    //double shelterPosition;
-    //double climberRightPosition;
-    //double climberLeftPosition;
+
+    public int direction = 1;
 
     public TankTeleOp() {
 
@@ -43,76 +42,42 @@ public class TankTeleOp extends OpMode {
 
     @Override
     public void init() {
+
 	    motorRight = hardwareMap.dcMotor.get("motorRight");
         motorLeft = hardwareMap.dcMotor.get("motorLeft");
-        motorRight.setDirection(DcMotor.Direction.REVERSE);
-//        motorIntake = hardwareMap.dcMotor.get("motor_3");
+//        motorLeft.setDirection(DcMotor.Direction.REVERSE);
+
         winchRight = hardwareMap.dcMotor.get("winchRight");
         winchLeft = hardwareMap.dcMotor.get("winchLeft");
         winchRight.setDirection(DcMotor.Direction.REVERSE);
         
-       // climberLeft = hardwareMap.servo.get("servo_1");
-        //climberRight = hardwareMap.servo.get("servo_2");
-        //shelter = hardwareMap.servo.get("servo_4");
         hookRight = hardwareMap.servo.get("hookRight");
         hookLeft = hardwareMap.servo.get("hookLeft");
         shelter = hardwareMap.servo.get("shelter");
+        arm = hardwareMap.servo.get("arm");
+        triggerRight = hardwareMap.servo.get("triggerRight");
+        triggerLeft = hardwareMap.servo.get("triggerLeft");
 
-        //shelter.setPosition(0);
+        triggerLeft.setPosition(0);
+        triggerRight.setPosition(0.5);
+        arm.setPosition(1);
+
     }
 
 
     @Override
     public void loop() {
-        //trying to get an intake to run. Idk what I'm doing someone will have to check later.
+
         float right = gamepad1.left_stick_y;
         float left = gamepad1.right_stick_y;
         float opleft = gamepad2.left_stick_y;
-        //float intake;
-
-/*
-        // to flip directions.
-        if(gamepad1.start)
-        {
-            if(direction == 0)
-            {
-                direction = 1;
-            }
-            else
-            {
-                direction = 0;
-            }
-
-        }*/
-
-        /*if(gamepad1.a == true)
-        {
-            intake =1;
-        }
-        else
-        {
-            intake =0;
-        }*/  //Changing button a to toggle  -- TW
-/*
-        if ((!aToggle.equals(gamepad1.a))){
-            if (gamepad1.a) {
-                if (intake == 0) {
-                    intake = 1;
-                } else {
-                    intake = 0;
-                }
-            }
-            aToggle=gamepad1.a;
-        }
-
-
-        motorIntake.setPower(intake);
-*/
+        float opright = gamepad2.right_stick_y;
 
         // clip the right/left values so that the values never exceed +/- 1
         right = Range.clip(right, -1, 1);
         left = Range.clip(left, -1, 1);
         opleft = Range.clip(opleft, -1, 1);
+        opright = Range.clip(opright, -1, 1);
 
 
         // scale the joystick value to make it easier to control
@@ -120,68 +85,77 @@ public class TankTeleOp extends OpMode {
         right = (float)scaleInput(right);
         left = (float)scaleInput(left);
         opleft = (float)scaleInput(opleft);
-
-        if(direction == 1)
-        {
-//            left = -left;
-//            right = -right;
-        }
+        opright = (float)scaleInput(opright);
 
         // write the values to the motors
-        motorRight.setPower(-left);
-        motorLeft.setPower(-right);
+        motorRight.setPower(right);
+        motorLeft.setPower(-left);
 
         winchLeft.setPower(opleft);
         winchRight.setPower(opleft);
 
-        if(gamepad2.a)
+//        Lift.setPower(opright);
+
+//        if(gamepad1.left_bumper) {
+//            Intake.setPower(1);
+//        }
+//        if(gamepad1.right_bumper) {
+//            Intake.setPower(0);
+//        }
+        if(gamepad2.a)  //up
         {
             hookRightPosition = 0;
             hookLeftPosition = 1;
         }
-        if(gamepad2.b)
+        if(gamepad2.b) //down
         {
             hookRightPosition = 1;
             hookLeftPosition = 0;
         }
-        if(gamepad2.left_bumper)
-        {
+        if(gamepad2.left_bumper) {
             shelterPosition = 1;
         }
-        if(gamepad2.right_bumper)
-        {
+        if(gamepad2.right_bumper) {
             shelterPosition = 0;
         }
 
-        /*
-        if(gamepad2.left_bumper)
-        {
-            climberRightPosition = .75;
+        if(gamepad2.y) {
+            arm.setPosition(0);
         }
-        if(gamepad2.right_bumper)
-        {
-            climberRightPosition = 0;
+        if(gamepad2.x) {
+            arm.setPosition(1);
         }
-        */
 
+        if(gamepad2.dpad_left) {
+            triggerLeft.setPosition(0.6);
+        }
+        if(gamepad2.dpad_up) {
+            triggerLeft.setPosition(0);
+        }
+        if(gamepad2.dpad_right) {
+            triggerRight.setPosition(0);
+        }
+        if(gamepad2.dpad_down) {
+            triggerRight.setPosition(0.5);
+        }
 
+//        if(gamepad2.back) {
+//            gate.setPosition(.25);
+//        }
+//        if(gamepad2.start) {
+//            gate.setPosition(.45);
+//        }
         hookRightPosition = Range.clip(hookRightPosition, 0, 1);
         hookLeftPosition = Range.clip(hookLeftPosition, 0, 1);
         shelterPosition = Range.clip(shelterPosition, 0, 1);
-        //climberRightPosition = Range.clip(climberRightPosition, 0, 1);
-        //climberLeftPosition = Range.clip(climberLeftPosition, 0, 1);
 
         hookRight.setPosition(hookRightPosition);
         hookLeft.setPosition(hookLeftPosition);
         shelter.setPosition(shelterPosition);
-        //climberRight.setPosition(climberRightPosition);
-        //climberLeft.setPosition(climberLeftPosition);
-
 
         telemetry.addData("Text", "*** Robot Data***");
         telemetry.addData("left", "left pwr: " + String.format("%.2f", left));
         telemetry.addData("right", "right pwr: " + String.format("%.2f", right));
-        telemetry.addData("Direction", "Direction: " + String.format("%d", direction));
         telemetry.addData("servos:", "hookRight:" + hookRightPosition + "hookLeft:"+ hookLeftPosition+" shelter:" + shelterPosition);
         telemetry.addData("Lift", "Sending=" + String.format("%.2f",opleft) + " Left=" + winchLeft.getPower() + " Right=" + winchRight.getPower());
 
@@ -221,5 +195,10 @@ public class TankTeleOp extends OpMode {
         return dScale;
     }
     @Override
-    public void stop(){}
+    public void stop(){
+        motorLeft.setPower(0);
+        motorRight.setPower(0);
+        winchRight.setPower(0);
+        winchLeft.setPower(0);
+    }
 }

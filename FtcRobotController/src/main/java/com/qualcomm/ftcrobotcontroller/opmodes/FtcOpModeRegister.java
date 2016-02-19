@@ -57,8 +57,7 @@ public class FtcOpModeRegister implements OpModeRegister {
 
     manager.register("DriveTrain_Alex_yo_yo", DriveTrain_Alex.class);
     manager.register("Autonomous_Alex", Autonomous_Alex.class);
-    manager.register("Switchback", Switchback.class);
     manager.register("TankTeleOp", TankTeleOp.class);
-    manager.register("6221Auton", Auton.class);
+    manager.register("Auton", Auton.class);
   }
 }
