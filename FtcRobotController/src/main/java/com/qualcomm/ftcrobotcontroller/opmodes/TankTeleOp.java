@@ -18,23 +18,23 @@ public class TankTeleOp extends OpMode {
     DcMotor winchRight;
     DcMotor winchLeft;
 
-//    DcMotor Lift;
-//    DcMotor Intake;
+    DcMotor Lift;
+    DcMotor Intake;
 
     // Initialize Servos
     Servo hookRight;
     Servo hookLeft;
     Servo shelter;
     Servo arm;
-    Servo triggerRight;
-    Servo triggerLeft;
-//    Servo gate;
+    Servo triggers;
+    Servo gate;
 
     double hookRightPosition = 1;
-    double hookLeftPosition;
+    double hookLeftPosition = 0;
     double shelterPosition = 0;
 
     public int direction = 1;
+    public double liftmultiplier = 0.25;
 
     public TankTeleOp() {
 
@@ -50,16 +50,20 @@ public class TankTeleOp extends OpMode {
         winchRight = hardwareMap.dcMotor.get("winchRight");
         winchLeft = hardwareMap.dcMotor.get("winchLeft");
         winchRight.setDirection(DcMotor.Direction.REVERSE);
-        
+
+        Lift = hardwareMap.dcMotor.get("Lift");
+        Intake = hardwareMap.dcMotor.get("Intake");
+
         hookRight = hardwareMap.servo.get("hookRight");
         hookLeft = hardwareMap.servo.get("hookLeft");
         shelter = hardwareMap.servo.get("shelter");
         arm = hardwareMap.servo.get("arm");
-        triggerRight = hardwareMap.servo.get("triggerRight");
-        triggerLeft = hardwareMap.servo.get("triggerLeft");
+        gate = hardwareMap.servo.get("gate");
+        triggers = hardwareMap.servo.get("triggers");
 
-        triggerLeft.setPosition(0);
-        triggerRight.setPosition(0.5);
+        triggers.setPosition(0);
+//        triggerLeft.setPosition(0);
+//        triggerRight.setPosition(0.5);
         arm.setPosition(1);
 
     }
@@ -94,14 +98,17 @@ public class TankTeleOp extends OpMode {
         winchLeft.setPower(opleft);
         winchRight.setPower(opleft);
 
-//        Lift.setPower(opright);
+        Lift.setPower(opright*liftmultiplier);
 
-//        if(gamepad1.left_bumper) {
-//            Intake.setPower(1);
-//        }
-//        if(gamepad1.right_bumper) {
-//            Intake.setPower(0);
-//        }
+        if(gamepad1.left_bumper) {
+            Intake.setPower(1);
+        } else if(gamepad1.right_bumper) {
+            Intake.setPower(-1);
+        }
+        else {
+            Intake.setPower(0);
+        }
+
         if(gamepad2.a)  //up
         {
             hookRightPosition = 0;
@@ -127,24 +134,32 @@ public class TankTeleOp extends OpMode {
         }
 
         if(gamepad2.dpad_left) {
-            triggerLeft.setPosition(0.6);
-        }
-        if(gamepad2.dpad_up) {
-            triggerLeft.setPosition(0);
+            triggers.setPosition(.5);
         }
         if(gamepad2.dpad_right) {
-            triggerRight.setPosition(0);
-        }
-        if(gamepad2.dpad_down) {
-            triggerRight.setPosition(0.5);
+            triggers.setPosition(0);
         }
 
-//        if(gamepad2.back) {
-//            gate.setPosition(.25);
+//        if(gamepad2.dpad_left) {
+//            triggerLeft.setPosition(0.6);
 //        }
-//        if(gamepad2.start) {
-//            gate.setPosition(.45);
+//        if(gamepad2.dpad_up) {
+//            triggerLeft.setPosition(0);
 //        }
+//        if(gamepad2.dpad_right) {
+//            triggerRight.setPosition(0);
+//        }
+//        if(gamepad2.dpad_down) {
+//            triggerRight.setPosition(0.5);
+//        }
+
+        if(gamepad2.back) {
+            gate.setPosition(.6);
+        }
+        if(gamepad2.start) {
+            gate.setPosition(.4);
+        }
+
         hookRightPosition = Range.clip(hookRightPosition, 0, 1);
         hookLeftPosition = Range.clip(hookLeftPosition, 0, 1);
         shelterPosition = Range.clip(shelterPosition, 0, 1);
@@ -196,9 +211,5 @@ public class TankTeleOp extends OpMode {
     }
     @Override
     public void stop(){
-        motorLeft.setPower(0);
-        motorRight.setPower(0);
-        winchRight.setPower(0);
-        winchLeft.setPower(0);
     }
 }
